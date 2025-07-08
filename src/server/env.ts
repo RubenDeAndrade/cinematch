@@ -8,6 +8,8 @@ import { z } from 'zod';
 const envSchema = z.object({
   DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(['development', 'test', 'production']),
+  TMDB_API_URL: z.string().url(),
+  TMDB_API_KEY: z.string().min(1, 'TMDB_API_KEY must not be empty'),
 });
 
 const _env = envSchema.safeParse(process.env);
