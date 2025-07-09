@@ -31,11 +31,11 @@ export default async function PokemonDetailPage({ params }: { params: { id: stri
   const id = parseInt(params.id, 10);
 
   try {
-    const post = await serverTrpc.poke.getPokemonById({ id });
+    const pokemon = await serverTrpc.poke.getPokemonById({ id });
 
     return (
       <DefaultLayout>
-        <PokemonRN pokemon={post} />
+        <PokemonRN pokemon={pokemon} />
       </DefaultLayout>
     );
   } catch {
