@@ -30,10 +30,11 @@ function PokemonRN(props: PokemonProps) {
             <img src="/turn.png" className='w-[50px]' />
           </button>
           
-          
-          {pokemon.types.map((type) => (
-            <p key={type.type.url}>{type.type.name}</p>
-          ))}
+          <div className='w-[50%] flex flex-row justify-around'>
+            {pokemon.types.map((type) => (
+              <p key={type.type.url}>{type.type.name}</p>
+            ))}
+          </div>
         </div>
       
 

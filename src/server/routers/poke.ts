@@ -39,4 +39,16 @@ export const pokeRouter = router({
       return await pokeApi.pokemon.getPokeById(input.id);
     }),
 
+  /**
+   * Get Species details by ID
+   */
+  getSpeciesById: publicProcedure
+    .input(
+      z.object({
+        id: z.number().min(0)
+      }),
+    )
+    .query(async ({ input }) => {
+      return await pokeApi.species.getSpeciesById(input.id);
+    })
 });

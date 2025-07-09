@@ -2,7 +2,7 @@
  * Poke API Implementation
  */
 import { fetchPOKE } from ".";
-import { Pokemon } from "./dto/pokemon";
+import { Pokemon, PokemonSpecies } from "./dto/pokemon";
 
 /**
  * API Methods
@@ -31,8 +31,21 @@ export const pokemonApi = {
         }),
 };
 
+export const speciesApi = {
+    /**
+     * Get Pokemon Species By ID
+     * @param id Id of the species
+     * @returns The species: type, 
+     */
+    getSpeciesById: (id: number) => 
+        fetchPOKE<PokemonSpecies>({
+            path: `/api/v2/pokemon-species/${id}`,
+        }),
+};
+
 const pokeApi = {
     pokemon: pokemonApi,
+    species: speciesApi,
 }
 
 export default pokeApi;
