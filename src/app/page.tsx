@@ -33,8 +33,15 @@ export default function HomePage() {
   const ditto = trpc.poke.getPokemonById.useQuery({
     id: 35
   });
-
   console.log(ditto.data);
+
+  const pokemons = trpc.poke.list.useQuery({
+    cursor: "50",
+    limit: 50,
+  });
+
+  console.log("List pokemons:");
+  console.log(pokemons.data);
 
   return (
     <DefaultLayout>

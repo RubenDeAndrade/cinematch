@@ -1,6 +1,6 @@
 import { env } from '~/server/env';
 
-interface TMDBRequestOptions {
+interface RequestOptions {
   path: string;
   params?: Record<string, string | number | boolean>;
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -19,7 +19,7 @@ export async function fetchPOKE<T>({
   params = {},
   method = 'GET',
   body,
-}: TMDBRequestOptions): Promise<T> {
+}: RequestOptions): Promise<T> {
   const url = new URL(path, POKE_API_URL);
 
   Object.entries(params).forEach(([key, value]) => {
