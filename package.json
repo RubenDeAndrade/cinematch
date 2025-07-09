@@ -59,7 +59,7 @@
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
     "prisma": "^6.11.1",
-    "start-server-and-test": "^1.15.4",
+    "start-server-and-test": "^2.0.12",
     "tailwindcss": "^4.1.11",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
