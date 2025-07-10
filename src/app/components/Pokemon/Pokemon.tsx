@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import type { Pokemon, PokemonSprites, PokemonType } from '~/libs/poke/dto/pokemon';
 import { useState } from 'react';
+import { PokemonTypeFC } from './PokemonType';
 
 interface PokemonProps {
   pokemon: Pokemon
@@ -32,7 +33,7 @@ function PokemonRN(props: PokemonProps) {
           
           <div className='w-[50%] flex flex-row justify-around'>
             {pokemon.types.map((type) => (
-              <p key={type.type.url}>{type.type.name}</p>
+              <PokemonTypeFC key={type.type.url} {...type} />
             ))}
           </div>
         </div>

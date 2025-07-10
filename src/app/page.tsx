@@ -20,7 +20,7 @@ export default function HomePage() {
   */
 
   const pokemonsQuery = trpc.poke.list.useInfiniteQuery({
-    limit: 49,
+    limit: 50,
   }, {
     getNextPageParam(lastPage) {
       const nextCursor = parseInt(getTokenFromUrl(lastPage.next, 6), 10);
