@@ -1,11 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import type {
-  Pokemon,
-  PokemonSprites,
-  PokemonType,
-} from '~/libs/poke/dto/pokemon';
+import type { Pokemon } from '~/libs/poke/dto/pokemon';
 import { useState } from 'react';
 import { PokemonTypeFC } from './PokemonType';
 
@@ -13,12 +9,10 @@ interface PokemonProps {
   pokemon: Pokemon;
 }
 
-function PokemonRN(props: PokemonProps) {
-  const { pokemon } = props;
+function PokemonRN({ pokemon }: PokemonProps) {
+  const [isFrontFacing, setIsFrontFacing] = useState(true);
 
-  const [IsTurned, setIsTurned] = useState<boolean>(false);
-
-  const sprite_name = (!IsTurned ? 'front' : 'back') + '_default';
+  const sprite_name = (isFrontFacing ? 'front' : 'back') + '_default';
 
   return (
     <div className="flex flex-col justify-center h-full px-8 ">
@@ -36,7 +30,7 @@ function PokemonRN(props: PokemonProps) {
         />
 
         <button
-          onClick={() => setIsTurned(!IsTurned)}
+          onClick={() => setIsFrontFacing((isFrontFacing) => !isFrontFacing)}
           role="button"
           className="cursor-pointer"
         >
@@ -58,4 +52,4 @@ function PokemonRN(props: PokemonProps) {
   );
 }
 
-export default PokemonRN;
+export { PokemonRN };

@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation';
 import { DefaultLayout } from '../../components/DefaultLayout';
 import { serverTrpc } from '~/app/_trpc/server';
-import { PokemonRN } from '~/app/components/Pokemon';
-import { getTokenFromUrl } from '~/utils/get-token-from-url';
+import { PokemonRN } from '~/app/components/Pokemon/Pokemon';
 
 export default async function PokemonDetailPage({
   params,
