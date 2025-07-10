@@ -8,12 +8,10 @@ interface PokemonProps {
   pokemon: Pokemon
 }
 
-function PokemonRN(props: PokemonProps) {
-  const { pokemon } = props;
+function PokemonRN({ pokemon }: PokemonProps) {
+  const [isFrontFacing, setIsFrontFacing] = useState(true);
 
-  const [IsTurned, setIsTurned] = useState<boolean>(false);
-
-  const sprite_name = (!IsTurned ? "front" : "back") + "_default";
+  const sprite_name = (isFrontFacing ? "front" : "back") + "_default";
 
   return (
     <div className="flex flex-col justify-center h-full px-8 ">
@@ -26,7 +24,7 @@ function PokemonRN(props: PokemonProps) {
           <img src={pokemon.sprites[sprite_name]} className='w-full max-w-[400px]' />
           
 
-          <button onClick={() => setIsTurned(!IsTurned)} role='button' className='cursor-pointer'>
+          <button onClick={() => setIsFrontFacing((isFrontFacing) => !isFrontFacing)} role='button' className='cursor-pointer'>
             <img src="/turn.png" className='w-[50px]' />
           </button>
           
@@ -44,6 +42,8 @@ function PokemonRN(props: PokemonProps) {
       </pre>
     </div>
   );
-}
+};
 
-export default PokemonRN;
+export {
+  PokemonRN,
+};
