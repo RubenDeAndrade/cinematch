@@ -1,7 +1,7 @@
 /**
  * Generic Paginated Response by Poke API
  */
-export interface TMDBPaginatedResponse<T> {
+export interface PokePaginatedResponse<T> {
   count: number;    // total number of items
   previous: string; // url for previous page
   next: string;     // url for next page

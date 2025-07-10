@@ -2,6 +2,7 @@
  * Poke API Implementation
  */
 import { fetchPOKE } from ".";
+import { ExternalResource, PokePaginatedResponse } from "./dto/common";
 import { Pokemon, PokemonSpecies } from "./dto/pokemon";
 
 /**
@@ -15,7 +16,7 @@ export const pokemonApi = {
      * @returns A list of pokemon (name and url only, to get full details on each pokemon, getByID is necessary)
      */
     listPokemon: (offset: number, limit: number) =>
-        fetchPOKE<Pokemon[]>({
+        fetchPOKE<PokePaginatedResponse<ExternalResource>>({
             path: `/api/v2/pokemon?offset=${offset}&limit=${limit}`,
         }),
 

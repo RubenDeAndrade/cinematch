@@ -1,16 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { Fragment, useState } from 'react';
 import { DefaultLayout } from './components/DefaultLayout';
 import { trpc } from './_trpc/client';
+import { getTokenFromUrl } from '~/utils/get-token-from-url';
 
 export default function HomePage() {
-  const [formData, setFormData] = useState({
-    title: '',
-    text: '',
-  });
-  const utils = trpc.useUtils();
+  /*
   const postsQuery = trpc.post.list.useInfiniteQuery(
     {
       limit: 5,
@@ -21,119 +17,60 @@ export default function HomePage() {
       },
     },
   );
+  */
 
-  const addPost = trpc.post.add.useMutation({
-    async onSuccess() {
-      // refetches posts after a post is added
-      await utils.post.list.invalidate();
-      setFormData({ title: '', text: '' });
-    },
-  });
-
-  const ditto = trpc.poke.getPokemonById.useQuery({
-    id: 35
-  });
-  console.log(ditto.data);
-
-  const pokemons = trpc.poke.list.useQuery({
-    cursor: "50",
+  const pokemonsQuery = trpc.poke.list.useInfiniteQuery({
     limit: 50,
+  }, {
+    getNextPageParam(lastPage) {
+      const nextCursor = parseInt(getTokenFromUrl(lastPage.next, 6), 10);
+      return nextCursor.toString();
+    }
   });
 
-  console.log("List pokemons:");
-  console.log(pokemons.data);
+  const pokeIds = pokemonsQuery.data?.pages.map((page) => page.results.map((pokeRes) => parseInt(getTokenFromUrl(pokeRes.url, 8), 10))).flat() ?? [];
+  const pokemons = trpc.useQueries((t) =>
+    pokeIds?.map((id) => t.poke.getPokemonById({ id }))
+  );
 
   return (
     <DefaultLayout>
       <div className="flex flex-col bg-gray-800 py-8">
-        <h1 className="text-4xl font-bold">
-          Welcome to your tRPC with Prisma starter!
+        <h1 className="w-full text-center text-4xl font-bold">
+          Pokédex
         </h1>
-        <p className="text-gray-400">
-          If you get stuck, check{' '}
-          <Link className="underline" href="https://trpc.io">
-            the docs
-          </Link>
-          , write a message in our{' '}
-          <Link className="underline" href="https://trpc.io/discord">
-            Discord-channel
-          </Link>
-          , or write a message in{' '}
-          <Link
-            className="underline"
-            href="https://github.com/trpc/trpc/discussions"
-          >
-            GitHub Discussions
-          </Link>
-          .
-        </p>
-
-        <div className="mt-8">
-          <div className="mb-4 flex gap-4">
-            <input
-              className="rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-white"
-              placeholder="Title"
-              onChange={(e) => {
-                setFormData((prev) => ({ ...prev, title: e.target.value }));
-              }}
-              value={formData.title}
-            />
-            <input
-              className="rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-white"
-              placeholder="Text"
-              onChange={(e) => {
-                setFormData((prev) => ({ ...prev, text: e.target.value }));
-              }}
-              value={formData.text}
-            />
-            <button
-              className="rounded-md bg-indigo-500 px-4 py-2 text-white hover:bg-indigo-600"
-              onClick={() => {
-                addPost.mutate({
-                  title: formData.title,
-                  text: formData.text,
-                });
-              }}
-              disabled={addPost.isPending}
-            >
-              {addPost.isPending ? 'Loading...' : 'Add'}
-            </button>
-          </div>
-        </div>
 
         <div className="mt-4 flex flex-col gap-4">
-          {postsQuery.data?.pages.map((page, index) => (
-            <Fragment key={page.items[0]?.id ?? index}>
-              {page.items.map((item) => (
+          {pokemons.map(({ data: pokemon }, index) => (
                 <div
-                  key={item.id}
+                  key={index + 1}
                   className="rounded-md border border-gray-600 bg-gray-700 p-4"
                 >
-                  <h2 className="text-2xl font-bold">{item.title}</h2>
-                  <p className="text-gray-400">{item.text}</p>
+                  <h2 className="text-2xl font-bold">{pokemon?.name}</h2>
+                  {pokemon?.sprites.front_default && (
+                    <img src={pokemon?.sprites.front_default ?? ''} className="max-w-[80px]" />
+                  )}
                   <Link
-                    href={`/post/${item.id}`}
+                    href={`/pokemon/${pokemon?.id}`}
                     className="mt-2 inline-block rounded-md bg-indigo-500 px-4 py-2 text-white hover:bg-indigo-600"
                   >
                     View
                   </Link>
                 </div>
-              ))}
-            </Fragment>
           ))}
           <div className="flex justify-center">
             <button
               className="rounded-md bg-indigo-500 px-4 py-2 text-white hover:bg-indigo-600"
-              onClick={() => void postsQuery.fetchNextPage()}
+              onClick={() => void pokemonsQuery.fetchNextPage()}
               disabled={
-                !postsQuery.hasNextPage || postsQuery.isFetchingNextPage
+                !pokemonsQuery.hasNextPage || pokemonsQuery.isFetchingNextPage
               }
             >
-              {postsQuery.isFetchingNextPage
+              {pokemonsQuery.isFetchingNextPage
                 ? 'Loading more...'
-                : postsQuery.hasNextPage
+                : pokemonsQuery.hasNextPage
                   ? 'Load more'
-                  : 'No more posts'}
+                  : 'No more pokémon'}
             </button>
           </div>
         </div>

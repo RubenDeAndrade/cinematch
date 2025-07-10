@@ -21,7 +21,7 @@ export const pokeRouter = router({
       const limit = input.limit ?? 50;
       const { cursor } = input;
 
-      const offset = parseInt(cursor ?? "50", 10);
+      const offset = parseInt(cursor ?? "0", 10);
 
       return await pokeApi.pokemon.listPokemon(offset, limit);
     }),
