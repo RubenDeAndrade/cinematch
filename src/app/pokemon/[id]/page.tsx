@@ -15,7 +15,6 @@ export default async function PokemonDetailPage({ params }: { params: { id: stri
     /*
     const speciesId = parseInt(getTokenFromUrl(pokemon.species.url, 30), 10);
     const species = await serverTrpc.poke.getSpeciesById({ id: speciesId });
-    console.log(species);
     */
 
     return (
