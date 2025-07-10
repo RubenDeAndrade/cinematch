@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { DefaultLayout } from '../../components/DefaultLayout';
 import { serverTrpc } from '~/app/_trpc/server';
-import PokemonRN from '~/app/components/Pokemon/Pokemon';
+import { PokemonRN } from '~/app/components/Pokemon';
 import { getTokenFromUrl } from '~/utils/get-token-from-url';
 
 export default async function PokemonDetailPage({
@@ -19,7 +19,6 @@ export default async function PokemonDetailPage({
     /*
     const speciesId = parseInt(getTokenFromUrl(pokemon.species.url, 30), 10);
     const species = await serverTrpc.poke.getSpeciesById({ id: speciesId });
-    console.log(species);
     */
 
     return (
