@@ -10,7 +10,7 @@ interface RequestOptions {
 const POKE_API_URL = env.POKE_API_URL;
 
 /**
- * Generic fetch function for TMDB API
+ * Generic fetch function for Poke API
  * @param options - Request options
  * @returns The response data
  */
