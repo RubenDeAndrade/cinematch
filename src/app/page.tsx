@@ -46,7 +46,7 @@ export default function HomePage() {
                   key={index + 1}
                   className="flex flex-col justify-center items-center rounded-md border border-gray-600 bg-gray-700 p-4 w-[150px] h-[200px]"
                 >
-                  <h2 className="text-2xl font-bold capitalize text-nowrap">{pokemon?.name}</h2>
+                  <h2 className="max-w-[100%] text-[20px] font-bold capitalize truncate">{pokemon?.name}</h2>
                   {pokemon?.sprites.front_default && (
                     <img src={pokemon?.sprites.front_default ?? ''} className="max-w-[80px]" />
                   )}
