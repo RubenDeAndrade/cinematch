@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { DefaultLayout } from '../../components/DefaultLayout';
 import { serverTrpc } from '~/app/_trpc/server';
-import { PokemonRN } from '~/app/components/Pokemon/Pokemon';
+import { PokemonDetail } from '~/app/components/Pokemon/Pokemon';
 
 export default async function PokemonDetailPage({
   params,
@@ -22,7 +22,7 @@ export default async function PokemonDetailPage({
 
     return (
       <DefaultLayout>
-        <PokemonRN pokemon={pokemon} />
+        <PokemonDetail pokemon={pokemon} />
       </DefaultLayout>
     );
   } catch {

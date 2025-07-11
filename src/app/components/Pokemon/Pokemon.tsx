@@ -9,7 +9,7 @@ interface PokemonProps {
   pokemon: Pokemon;
 }
 
-function PokemonRN({ pokemon }: PokemonProps) {
+function PokemonDetail({ pokemon }: PokemonProps) {
   const [isFrontFacing, setIsFrontFacing] = useState(true);
 
   const sprite_name = (isFrontFacing ? 'front' : 'back') + '_default';
@@ -52,4 +52,4 @@ function PokemonRN({ pokemon }: PokemonProps) {
   );
 }
 
-export { PokemonRN };
+export { PokemonDetail };
