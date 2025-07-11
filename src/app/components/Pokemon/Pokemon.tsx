@@ -35,6 +35,12 @@ function PokemonDetail({ pokemon }: PokemonProps) {
           className="w-full max-w-[400px]"
         />
 
+        <div className="w-[50%] flex flex-row justify-around mb-4">
+          {pokemon.types.map((type) => (
+            <PokemonTypeFC key={type.type.url} {...type} />
+          ))}
+        </div>
+
         <div className='w-full m-auto flex flex-row mb-4'>
           <div className='flex-1 flex justify-center items-center'>
             {pokemon.sprites.front_female != null && (
@@ -42,12 +48,11 @@ function PokemonDetail({ pokemon }: PokemonProps) {
               onClick={() => setIsMale((isMale) => !isMale)}
               type="button"
               className="flex p-2 gap-x-4 bg-stone-400 rounded-full items-center justify-center">
-                <p>Male</p>
-                <p>Female</p>
+                <img src="/male.svg" className="max-h-[30px]" alt="Male" />
+                <img src="/female.svg" className="max-h-[30px]" alt="Female" />
             </button>
           )}
           </div>
-          
           
           <div className='flex-1 flex justify-center items-center'>
             <button
@@ -69,14 +74,6 @@ function PokemonDetail({ pokemon }: PokemonProps) {
             </button>
           </div>
           
-        </div>
-
-        
-
-        <div className="w-[50%] flex flex-row justify-around">
-          {pokemon.types.map((type) => (
-            <PokemonTypeFC key={type.type.url} {...type} />
-          ))}
         </div>
       </div>
 
