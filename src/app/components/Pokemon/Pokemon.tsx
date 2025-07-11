@@ -31,7 +31,7 @@ function PokemonDetail({ pokemon }: PokemonProps) {
       <Link className="text-gray-300 underline mb-4" href="/">
         Home
       </Link>
-      <h1 className="text-7xl font-bold w-full text-center capitalize">
+      <h1 className="text-7xl font-bold w-full text-center capitalize mb-4">
         {pokemon.name}
       </h1>
 
@@ -50,34 +50,38 @@ function PokemonDetail({ pokemon }: PokemonProps) {
         <div className='w-full m-auto flex flex-row mb-4'>
           <div className='flex-1 flex justify-center items-center'>
             {pokemon.sprites.front_female != null && (
-            <button
-              onClick={() => setIsMale((isMale) => !isMale)}
-              type="button"
-              className="flex p-2 gap-x-4 bg-stone-400 rounded-full items-center justify-center">
-                <img src="/male.svg" className="max-h-[30px]" alt="Male" />
-                <img src="/female.svg" className="max-h-[30px]" alt="Female" />
-            </button>
-          )}
+              <button
+                onClick={() => setIsMale((isMale) => !isMale)}
+                type="button"
+                className="flex p-2 gap-x-4 bg-stone-400 rounded-full items-center justify-center">
+                  <img src="/male.svg" className="max-h-[30px]" alt="Male" />
+                  <img src="/female.svg" className="max-h-[30px]" alt="Female" />
+              </button>
+            )}
           </div>
           
           <div className='flex-1 flex justify-center items-center'>
-            <button
-              onClick={() => setIsFrontFacing((isFrontFacing) => !isFrontFacing)}
-              role="button"
-              className="bg-stone-400 rounded-full cursor-pointer"
-              >
-                <img src="/turn.png" className="w-[50px]" />
-            </button>
+            {pokemon.sprites.back_default && (
+              <button
+                onClick={() => setIsFrontFacing((isFrontFacing) => !isFrontFacing)}
+                role="button"
+                className="bg-stone-400 rounded-full cursor-pointer"
+                >
+                  <img src="/turn.png" className="w-[50px]" />
+              </button>
+            )}
           </div>
           
           <div className='flex-1 flex justify-center items-center'>
-            <button
-              onClick={() => setIsShiny((isShiny) => !isShiny)}
-              type="button"
-              className="flex p-2 gap-x-4 bg-stone-400 rounded-full items-center justify-center">
-                <p>Shiny</p>
-                <p>Not shiny</p>
-            </button>
+            {pokemon.sprites.front_shiny && (
+              <button
+                onClick={() => setIsShiny((isShiny) => !isShiny)}
+                type="button"
+                className="flex p-2 gap-x-4 bg-stone-400 rounded-full items-center justify-center">
+                  <p>Shiny</p>
+                  <p>Not shiny</p>
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -92,25 +96,29 @@ function PokemonDetail({ pokemon }: PokemonProps) {
 
         <PokemonInfo name='Cries'>
           <div className='flex flex-row gap-x-4 px-2'>
-            <figure className='w-[50%]'>
-              <figcaption>Latest</figcaption>
-              <button 
-                onClick={() => soundLatest.current?.paused ? soundLatest.current.play() : soundLatest.current?.pause()}
-                className='w-full text-center border border-red'>
-                Play
-              </button>
-              <audio ref={soundLatest} src={pokemon.cries.latest} />
-            </figure>
-
-            <figure className='w-[50%]'>
-              <figcaption>Legacy</figcaption>
-              <button 
-                onClick={() => soundLegacy.current?.paused ? soundLegacy.current.play() : soundLegacy.current?.pause()}
-                className='w-full text-center border border-red'>
-                Play
-              </button>
-              <audio ref={soundLegacy} src={pokemon.cries.legacy} />
-            </figure>
+            {pokemon.cries.latest && (
+              <figure className='w-full'>
+                <figcaption>Latest</figcaption>
+                <button 
+                  onClick={() => soundLatest.current?.paused ? soundLatest.current.play() : soundLatest.current?.pause()}
+                  className='w-full text-center border border-red'>
+                  Play
+                </button>
+                <audio ref={soundLatest} src={pokemon.cries.latest} />
+              </figure>
+            )}
+            
+            {pokemon.cries.legacy && (
+              <figure className='w-full'>
+                <figcaption>Legacy</figcaption>
+                <button 
+                  onClick={() => soundLegacy.current?.paused ? soundLegacy.current.play() : soundLegacy.current?.pause()}
+                  className='w-full text-center border border-red'>
+                  Play
+                </button>
+                <audio ref={soundLegacy} src={pokemon.cries.legacy} />
+              </figure>
+            )}
           </div>
         </PokemonInfo>
 
@@ -120,10 +128,12 @@ function PokemonDetail({ pokemon }: PokemonProps) {
               <p>Ability</p>
               <p>{pokemon.abilities.filter((ability) => !ability.is_hidden).map((ability) => formatName(ability.ability.name)).join(" or ")}</p>
             </div>
-            <div>
-              <p>Hidden ability</p>
-              <p>{formatName(pokemon.abilities.filter((ability) => ability.is_hidden)[0].ability.name)}</p>
+            {pokemon.abilities.filter((ability) => ability.is_hidden).length > 0 && (
+              <div>
+                <p>Hidden ability</p>
+                <p>{formatName(pokemon.abilities.filter((ability) => ability.is_hidden)[0]?.ability.name)}</p>
             </div>
+            )}
           </div>
         </PokemonInfo>
       </div>

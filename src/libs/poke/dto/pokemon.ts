@@ -50,8 +50,8 @@ export interface Pokemon {
     slot: number;
   }[];
   cries: {
-    latest: string;
-    legacy: string;
+    latest: string | null;
+    legacy: string | null;
   };
   moves: PokemonMove[];
   stats: {

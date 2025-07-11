@@ -4,29 +4,35 @@ import Link from 'next/link';
 import { DefaultLayout } from './components/DefaultLayout';
 import { trpc } from './_trpc/client';
 import { getTokenFromUrl } from '~/utils/get-token-from-url';
+import { useCallback, useRef } from 'react';
 
 export default function HomePage() {
-  /*
-  const postsQuery = trpc.post.list.useInfiniteQuery(
-    {
-      limit: 5,
-    },
-    {
-      getNextPageParam(lastPage) {
-        return lastPage.nextCursor;
-      },
-    },
-  );
-  */
+  const scrollObserver = useRef<IntersectionObserver>(null);
 
   const pokemonsQuery = trpc.poke.list.useInfiniteQuery({
     limit: 50,
   }, {
     getNextPageParam(lastPage) {
+      if (lastPage.next == null) return null;
       const nextCursor = parseInt(getTokenFromUrl(lastPage.next, 6), 10);
       return nextCursor.toString();
     }
   });
+
+  const infiniteScrollDiv = useCallback(
+    (node: HTMLDivElement) => {
+      if (pokemonsQuery.isLoading) return;
+
+      if (scrollObserver.current) scrollObserver.current.disconnect();
+
+      scrollObserver.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && pokemonsQuery.hasNextPage && !pokemonsQuery.isFetching) {
+          pokemonsQuery.fetchNextPage();
+        }
+      });
+
+      if (node) scrollObserver.current.observe(node);
+    }, [pokemonsQuery]);
 
   const pokeIds = pokemonsQuery.data?.pages.map((page) => page.results.map((pokeRes) => parseInt(getTokenFromUrl(pokeRes.url, 8), 10))).flat() ?? [];
   const pokemons = trpc.useQueries((t) =>
@@ -40,7 +46,9 @@ export default function HomePage() {
           Pokédex
         </h1>
 
-        <div className="mt-4 grid justify-center items-center content-center justify-items-center grid-flow-row grid-cols-[repeat(auto-fit,150px)] auto-rows-auto gap-4">
+        <div
+          ref={infiniteScrollDiv}
+          className="mt-4 grid justify-center items-center content-center justify-items-center grid-flow-row grid-cols-[repeat(auto-fit,150px)] auto-rows-auto gap-4">
           {pokemons.map(({ data: pokemon }, index) => (
                 <div
                   key={index + 1}
