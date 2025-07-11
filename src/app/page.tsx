@@ -19,8 +19,8 @@ export default function HomePage() {
     }
   });
 
-  const infiniteScrollDiv = useCallback(
-    (node: HTMLDivElement) => {
+  const lastElementRef = useCallback(
+    (node: HTMLButtonElement) => {
       if (pokemonsQuery.isLoading) return;
 
       if (scrollObserver.current) scrollObserver.current.disconnect();
@@ -32,7 +32,7 @@ export default function HomePage() {
       });
 
       if (node) scrollObserver.current.observe(node);
-    }, [pokemonsQuery]);
+    }, [pokemonsQuery.isFetching]);
 
   const pokeIds = pokemonsQuery.data?.pages.map((page) => page.results.map((pokeRes) => parseInt(getTokenFromUrl(pokeRes.url, 8), 10))).flat() ?? [];
   const pokemons = trpc.useQueries((t) =>
@@ -46,9 +46,7 @@ export default function HomePage() {
           Pokédex
         </h1>
 
-        <div
-          ref={infiniteScrollDiv}
-          className="mt-4 grid justify-center items-center content-center justify-items-center grid-flow-row grid-cols-[repeat(auto-fit,150px)] auto-rows-auto gap-4">
+        <div className="mt-4 grid justify-center items-center content-center justify-items-center grid-flow-row grid-cols-[repeat(auto-fit,150px)] auto-rows-auto gap-4">
           {pokemons.map(({ data: pokemon }, index) => (
                 <div
                   key={index + 1}
@@ -72,6 +70,7 @@ export default function HomePage() {
           <button
             className="rounded-md bg-indigo-500 px-4 py-2 mt-6 text-white hover:bg-indigo-600"
             onClick={() => void pokemonsQuery.fetchNextPage()}
+            ref={lastElementRef}
             disabled={
               !pokemonsQuery.hasNextPage || pokemonsQuery.isFetchingNextPage
             }
