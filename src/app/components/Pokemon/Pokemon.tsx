@@ -2,8 +2,10 @@
 
 import Link from 'next/link';
 import type { Pokemon } from '~/libs/poke/dto/pokemon';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { PokemonTypeFC } from './PokemonType';
+import { PokemonInfo } from './PokemonInfo';
+import { formatName } from '~/utils/format-str';
 
 interface PokemonProps {
   pokemon: Pokemon;
@@ -13,6 +15,10 @@ function PokemonDetail({ pokemon }: PokemonProps) {
   const [isFrontFacing, setIsFrontFacing] = useState(true);
   const [isMale, setIsMale] = useState(true);
   const [isShiny, setIsShiny] = useState(false);
+
+  // for playing sounds when user clicks a button
+  const soundLatest = useRef<HTMLAudioElement>(null);
+  const soundLegacy = useRef<HTMLAudioElement>(null);
 
   // this works, but some refactor couldn't hurt here
   const sprite_name = 
@@ -73,9 +79,55 @@ function PokemonDetail({ pokemon }: PokemonProps) {
                 <p>Not shiny</p>
             </button>
           </div>
-          
         </div>
       </div>
+      
+      <div className='flex flex-row justify-center gap-x-4'>
+        <PokemonInfo name='Height'>
+          <p>{`${(pokemon.height / 10).toFixed(1)}m`}</p>
+        </PokemonInfo>
+        <PokemonInfo name='Weight'>
+          <p>{`${(pokemon.weight / 10).toFixed(1)}kg`}</p>
+        </PokemonInfo>
+
+        <PokemonInfo name='Cries'>
+          <div className='flex flex-row gap-x-4 px-2'>
+            <figure className='w-[50%]'>
+              <figcaption>Latest</figcaption>
+              <button 
+                onClick={() => soundLatest.current?.paused ? soundLatest.current.play() : soundLatest.current?.pause()}
+                className='w-full text-center border border-red'>
+                Play
+              </button>
+              <audio ref={soundLatest} src={pokemon.cries.latest} />
+            </figure>
+
+            <figure className='w-[50%]'>
+              <figcaption>Legacy</figcaption>
+              <button 
+                onClick={() => soundLegacy.current?.paused ? soundLegacy.current.play() : soundLegacy.current?.pause()}
+                className='w-full text-center border border-red'>
+                Play
+              </button>
+              <audio ref={soundLegacy} src={pokemon.cries.legacy} />
+            </figure>
+          </div>
+        </PokemonInfo>
+
+        <PokemonInfo name='Abilities'>
+          <div className='flex flex-row gap-x-4 px-2'>
+            <div>
+              <p>Ability</p>
+              <p>{pokemon.abilities.filter((ability) => !ability.is_hidden).map((ability) => formatName(ability.ability.name)).join(" or ")}</p>
+            </div>
+            <div>
+              <p>Hidden ability</p>
+              <p>{formatName(pokemon.abilities.filter((ability) => ability.is_hidden)[0].ability.name)}</p>
+            </div>
+          </div>
+        </PokemonInfo>
+      </div>
+      
 
       <h2 className="text-2xl font-semibold py-2">Raw data:</h2>
       <pre className="bg-gray-900 p-4 rounded-xl overflow-x-scroll">
