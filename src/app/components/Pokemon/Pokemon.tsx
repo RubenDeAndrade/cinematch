@@ -11,9 +11,15 @@ interface PokemonProps {
 
 function PokemonDetail({ pokemon }: PokemonProps) {
   const [isFrontFacing, setIsFrontFacing] = useState(true);
+  const [isMale, setIsMale] = useState(true);
+  const [isShiny, setIsShiny] = useState(false);
 
-  const sprite_name = (isFrontFacing ? 'front' : 'back') + '_default';
-
+  // this works, but some refactor couldn't hurt here
+  const sprite_name = 
+    (isFrontFacing ? 'front' : 'back') + 
+    (isShiny ? '_shiny' : '') + 
+    (isMale ? (!isShiny ? '_default' : '') : '_female');
+    
   return (
     <div className="flex flex-col justify-center h-full px-8 ">
       <Link className="text-gray-300 underline mb-4" href="/">
@@ -29,13 +35,43 @@ function PokemonDetail({ pokemon }: PokemonProps) {
           className="w-full max-w-[400px]"
         />
 
-        <button
-          onClick={() => setIsFrontFacing((isFrontFacing) => !isFrontFacing)}
-          role="button"
-          className="cursor-pointer"
-        >
-          <img src="/turn.png" className="w-[50px]" />
-        </button>
+        <div className='w-full m-auto flex flex-row mb-4'>
+          <div className='flex-1 flex justify-center items-center'>
+            {pokemon.sprites.front_female != null && (
+            <button
+              onClick={() => setIsMale((isMale) => !isMale)}
+              type="button"
+              className="flex p-2 gap-x-4 bg-stone-400 rounded-full items-center justify-center">
+                <p>Male</p>
+                <p>Female</p>
+            </button>
+          )}
+          </div>
+          
+          
+          <div className='flex-1 flex justify-center items-center'>
+            <button
+              onClick={() => setIsFrontFacing((isFrontFacing) => !isFrontFacing)}
+              role="button"
+              className="bg-stone-400 rounded-full cursor-pointer"
+              >
+                <img src="/turn.png" className="w-[50px]" />
+            </button>
+          </div>
+          
+          <div className='flex-1 flex justify-center items-center'>
+            <button
+              onClick={() => setIsShiny((isShiny) => !isShiny)}
+              type="button"
+              className="flex p-2 gap-x-4 bg-stone-400 rounded-full items-center justify-center">
+                <p>Shiny</p>
+                <p>Not shiny</p>
+            </button>
+          </div>
+          
+        </div>
+
+        
 
         <div className="w-[50%] flex flex-row justify-around">
           {pokemon.types.map((type) => (
