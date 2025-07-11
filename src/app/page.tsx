@@ -32,7 +32,7 @@ export default function HomePage() {
       });
 
       if (node) scrollObserver.current.observe(node);
-    }, [pokemonsQuery.isFetching]);
+    }, [pokemonsQuery]);
 
   const pokeIds = pokemonsQuery.data?.pages.map((page) => page.results.map((pokeRes) => parseInt(getTokenFromUrl(pokeRes.url, 8), 10))).flat() ?? [];
   const pokemons = trpc.useQueries((t) =>

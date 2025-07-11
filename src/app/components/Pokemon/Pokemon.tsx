@@ -20,7 +20,7 @@ function PokemonDetail({ pokemon }: PokemonProps) {
   const soundLatest = useRef<HTMLAudioElement>(null);
   const soundLegacy = useRef<HTMLAudioElement>(null);
 
-  // this works, but some refactor couldn't hurt here
+  // TODO: this works, but some refactor couldn't hurt here
   const sprite_name = 
     (isFrontFacing ? 'front' : 'back') + 
     (isShiny ? '_shiny' : '') + 
